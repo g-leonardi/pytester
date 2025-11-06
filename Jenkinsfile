@@ -3,31 +3,31 @@ pipeline {
 
     stages {
         stage('Setup') {
-        steps {
-            sh '''
-                python3 --version
-                pip3 --version
+            steps {
+                sh '''
+                    apt-get update && apt-get install -y python3-venv
 
-                # Creiamo un virtual environment
-                python3 -m venv venv
-                . venv/bin/activate
+                    python3 --version
+                    pip3 --version
 
-                # Aggiorniamo pip e installiamo le dipendenze nel venv
-                pip install --upgrade pip
-                pip install -r requirements.txt
-            '''
+                    # Creiamo un virtual environment
+                    python3 -m venv venv
+                    . venv/bin/activate
+
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
+            }
         }
-    }
-
 
         stage('Test') {
-        steps {
-            sh '''
-                . venv/bin/activate
-                pytest --maxfail=1 --disable-warnings -q
-            '''
+            steps {
+                sh '''
+                    . venv/bin/activate
+                    pytest --maxfail=1 --disable-warnings -q
+                '''
+            }
         }
-}
     }
 
     post {
