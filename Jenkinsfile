@@ -3,22 +3,31 @@ pipeline {
 
     stages {
         stage('Setup') {
-            steps {
-                // Assicuriamoci di avere Python e pip
-                sh 'python3 --version'
-                sh 'pip3 --version'
+        steps {
+            sh '''
+                python3 --version
+                pip3 --version
 
-                // Installiamo le dipendenze
-                sh 'pip3 install -r requirements.txt'
-            }
+                # Creiamo un virtual environment
+                python3 -m venv venv
+                . venv/bin/activate
+
+                # Aggiorniamo pip e installiamo le dipendenze nel venv
+                pip install --upgrade pip
+                pip install -r requirements.txt
+            '''
         }
+    }
+
 
         stage('Test') {
-            steps {
-                // Eseguiamo i test (ad esempio pytest)
-                sh 'pytest'
-            }
+        steps {
+            sh '''
+                . venv/bin/activate
+                pytest --maxfail=1 --disable-warnings -q
+            '''
         }
+}
     }
 
     post {
