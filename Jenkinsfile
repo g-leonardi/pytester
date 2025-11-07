@@ -1,21 +1,22 @@
 pipeline {
-    agent {
-        docker {
-            image 'pytester:latest'
-            args '-u root'  // opzionale, se vuoi più permessi
-        }
-    }
+    agent any
 
     stages {
-        stage('Setup') {
+        stage('Build image') {
             steps {
-                sh 'python3 --version'
-                sh 'pip3 --version'
+                sh 'docker build -t pytester:latest .'
             }
         }
+
         stage('Test') {
+            agent {
+                docker {
+                    image 'pytester:latest'
+                    args '-u root'
+                }
+            }
             steps {
-                sh 'pytest || true'  // evita fallimento totale, utile per debugging
+                sh 'pytest || true'
             }
         }
     }
