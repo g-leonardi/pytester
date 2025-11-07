@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pytester-deployment
+  labels:
+    app: pytester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pytester
+  template:
+    metadata:
+      labels:
+        app: pytester
+    spec:
+      containers:
+        - name: pytester
+          image: pytester:latest
+          ports:
+            - containerPort: 5555

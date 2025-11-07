@@ -19,3 +19,6 @@ pytest==7.4.2
 
 # Per questo progetto specifico non servono librerie esterne
 # Aggiungi qui le dipendenze quando ne avrai bisogno
+
+#Flask per la web app
+flask==3.0.3
